@@ -1,3 +1,7 @@
+import datetime
+import xml.etree.ElementTree as ET
+import logging
+
 def generate_guide_xml(channels):
     now = datetime.datetime.utcnow()
     start_time = now.replace(hour=0, minute=0, second=0, microsecond=0)
