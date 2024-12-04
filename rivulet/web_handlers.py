@@ -1,4 +1,5 @@
 import aiohttp_jinja2
+import jinja2
 from aiohttp import web
 import urllib.parse
 import logging
@@ -14,7 +15,7 @@ def init_web_app(config):
 
     # Initialize template rendering
     templates_path = os.path.join(os.path.dirname(__file__), 'templates')
-    aiohttp_jinja2.setup(app, loader=aiohttp_jinja2.FileSystemLoader(templates_path))
+    aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(templates_path))
 
     # Add routes
     app.router.add_get('/', index)
