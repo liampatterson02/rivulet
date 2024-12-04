@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Channels{% endblock %}
+
+{% block content %}
+<h2>Channels</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Number</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for channel in channels %}
+        <tr>
+            <td>{{ channel.number }}</td>
+            <td>{{ channel.name }}</td>
+            <td>
+                <a href="/channel/{{ channel.id }}">View</a>
+                |
+                <a href="{{ channel.stream_url }}" target="_blank">Stream</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

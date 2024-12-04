@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ channel.name }}{% endblock %}
+
+{% block content %}
+<h2>{{ channel.name }}</h2>
+<p><strong>Channel Number:</strong> {{ channel.number }}</p>
+<p>
+    <a href="{{ channel.stream_url }}" target="_blank">Watch Stream</a>
+</p>
+<a href="/">Back to Channel List</a>
+{% endblock %}

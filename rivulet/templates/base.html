@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rivulet - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Rivulet</h1>
+        <nav>
+            <a href="/">Home</a>
+            <!-- Future navigation links -->
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>&copy; {{ year }} Rivulet</p>
+    </footer>
+    <script src="/static/script.js"></script>
+</body>
+</html>

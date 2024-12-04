@@ -7,6 +7,7 @@ from rivulet.ssdp import start_ssdp_server
 from rivulet.web_handlers import init_web_app
 from rivulet.m3u_parser import parse_m3u
 from rivulet.utils import get_local_ip
+from rivulet.api import init_api_routes
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -17,6 +18,8 @@ async def main():
     ip_address = get_local_ip()
     config.IP_ADDRESS = ip_address  # Update IP address in config
     logger.info(f"Local IP Address: {ip_address}")
+    app = init_web_app(config)
+    init_api_routes(app)  # Initialize API routes
 
     channels = await parse_m3u(config.HLS_PROXY_M3U_URL)
     config.CHANNELS = channels
