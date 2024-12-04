@@ -56,6 +56,14 @@ class Config:
             self.config.get('DEFAULT', 'EPG_ENABLE', fallback='True')
         ))
 
+        # Data directory for storing persistent data
+        self.DATA_DIR = os.environ.get(
+            'DATA_DIR',
+            self.config.get('DEFAULT', 'DATA_DIR', fallback='./data')
+        )
+        # Ensure the data directory exists
+        os.makedirs(self.DATA_DIR, exist_ok=True)
+
         # Internal variables
         self.DEVICE_UUID = str(uuid.uuid4())
         self.IP_ADDRESS = None  # To be set later

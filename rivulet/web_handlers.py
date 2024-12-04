@@ -6,6 +6,7 @@ import logging
 from rivulet.guide_generator import generate_guide_xml
 import os
 import datetime
+import json
 
 logger = logging.getLogger('rivulet.web_handlers')
 
@@ -19,6 +20,7 @@ def init_web_app(config):
 
     # Add routes
     app.router.add_get('/', index)
+    app.router.add_post('/update_channels', update_channels)  
     app.router.add_get('/channel/{channel_id}', channel_detail)
     app.router.add_get('/static/{filename}', static_handler)
 
@@ -99,11 +101,12 @@ async def lineup(request):
     lineup = []
     for ch in config.CHANNELS:
         lineup.append({
-            "GuideNumber": str(ch['number']),
+            "GuideNumber": ch['custom_number'],
             "GuideName": ch['name'],
             "URL": f"{base_url}/stream?channel={urllib.parse.quote(ch['id'])}"
         })
     return web.json_response(lineup)
+
 
 async def stream(request):
     config = request.app['config']
@@ -157,3 +160,30 @@ async def guide(request):
     logger.info("Received /guide.xml request")
     guide_xml = generate_guide_xml(config.CHANNELS)
     return web.Response(text=guide_xml, content_type='application/xml')
+
+async def update_channels(request):
+    config = request.app['config']
+    data = await request.post()
+    channel_numbers = data.getall('channel_numbers')
+
+    # channel_numbers is a list of values; we need to reconstruct the mapping
+    custom_numbers = {}
+    for key, value in data.items():
+        if key.startswith('channel_numbers['):
+            ch_id = key[len('channel_numbers['):-1]  # Extract channel ID
+            custom_numbers[ch_id] = value.strip()
+
+    # Save custom numbers to JSON file
+    channel_numbers_file = os.path.join(config.DATA_DIR, 'channel_numbers.json')
+    with open(channel_numbers_file, 'w') as f:
+        json.dump(custom_numbers, f)
+
+    # Update channels in memory
+    for ch in config.CHANNELS:
+        ch_id = ch['id']
+        if ch_id in custom_numbers:
+            ch['custom_number'] = custom_numbers[ch_id]
+        else:
+            ch['custom_number'] = str(ch['number'])  # Use default number as string
+
+    return web.HTTPFound('/')

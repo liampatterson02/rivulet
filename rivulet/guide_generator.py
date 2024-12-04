@@ -1,6 +1,3 @@
-import datetime
-import xml.etree.ElementTree as ET
-
 def generate_guide_xml(channels):
     now = datetime.datetime.utcnow()
     start_time = now.replace(hour=0, minute=0, second=0, microsecond=0)
@@ -13,6 +10,8 @@ def generate_guide_xml(channels):
         channel_elem = ET.SubElement(tv, 'channel', id=ch["id"])
         display_name_elem = ET.SubElement(channel_elem, 'display-name')
         display_name_elem.text = ch["name"]
+        channel_number_elem = ET.SubElement(channel_elem, 'display-number')
+        channel_number_elem.text = ch["custom_number"]
         url_elem = ET.SubElement(channel_elem, 'url')
         url_elem.text = ch["url"]
 
