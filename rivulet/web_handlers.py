@@ -163,27 +163,36 @@ async def guide(request):
 
 async def update_channels(request):
     config = request.app['config']
-    data = await request.post()
-    channel_numbers = data.getall('channel_numbers')
+    try:
+        data = await request.post()
+        logger.debug(f"Received POST data: {data}")
 
-    # channel_numbers is a list of values; we need to reconstruct the mapping
-    custom_numbers = {}
-    for key, value in data.items():
-        if key.startswith('channel_numbers['):
-            ch_id = key[len('channel_numbers['):-1]  # Extract channel ID
-            custom_numbers[ch_id] = value.strip()
+        # Reconstruct the mapping
+        custom_numbers = {}
+        for key, value in data.items():
+            logger.debug(f"Processing form field: {key} = {value}")
+            if key.startswith('channel_numbers['):
+                ch_id = key[len('channel_numbers['):-1]  # Extract channel ID
+                custom_numbers[ch_id] = value.strip()
 
-    # Save custom numbers to JSON file
-    channel_numbers_file = os.path.join(config.DATA_DIR, 'channel_numbers.json')
-    with open(channel_numbers_file, 'w') as f:
-        json.dump(custom_numbers, f)
+        logger.debug(f"Custom channel numbers: {custom_numbers}")
 
-    # Update channels in memory
-    for ch in config.CHANNELS:
-        ch_id = ch['id']
-        if ch_id in custom_numbers:
-            ch['custom_number'] = custom_numbers[ch_id]
-        else:
-            ch['custom_number'] = str(ch['number'])  # Use default number as string
+        # Save custom numbers to JSON file
+        channel_numbers_file = os.path.join(config.DATA_DIR, 'channel_numbers.json')
+        logger.debug(f"Saving custom numbers to {channel_numbers_file}")
+        with open(channel_numbers_file, 'w') as f:
+            json.dump(custom_numbers, f)
 
-    return web.HTTPFound('/')
+        # Update channels in memory
+        for ch in config.CHANNELS:
+            ch_id = ch['id']
+            if ch_id in custom_numbers:
+                ch['custom_number'] = custom_numbers[ch_id]
+            else:
+                ch['custom_number'] = str(ch['number'])  # Use default number as string
+
+        logger.info("Channel numbers updated successfully.")
+        return web.HTTPFound('/')
+    except Exception as e:
+        logger.exception("Error in update_channels")
+        return web.Response(status=500, text='Internal Server Error')
