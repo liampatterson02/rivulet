@@ -12,7 +12,7 @@ from rivulet.utils import get_local_ip
 from rivulet.api import init_api_routes
 
 # Configure logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('rivulet')
 
 async def main():
