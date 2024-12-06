@@ -11,7 +11,7 @@ from rivulet.m3u_parser import parse_m3u
 from rivulet.utils import get_local_ip
 from rivulet.api import init_api_routes
 
-# Configure logging
+# Configure logging (INFO)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('rivulet')
 
