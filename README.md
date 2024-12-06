@@ -1,19 +1,11 @@
-# rivulet
+# Rivulet
 
-rivulet emulates a virtual HDHomeRun tuner for Plex, proxies IPTV M3U playlists with buffering and transcoding, and provides a web interface for configuration. Channels with backup qualities (FHD, HD, SD) are merged into a single channel without suffixes in their displayed names.
+A virtual HDHomeRun tuner emulator for Plex, fetching and parsing IPTV M3U playlists, with optional transcoding.
 
-## Requirements
-
-- Node.js and npm
-- ffmpeg installed on the system
-- Plex and a network environment where Plex can access this server
-
-## Getting Started
+## Instructions
 
 1. `npm install`
 2. `npm run build:ui`
 3. `npm start`
-4. Access the web UI at http://localhost:3000
 
-Configure Plex by adding a network tuner with:
-`http://<your-server-ip>:3000/hdhr/discover.json`
+Configure settings in the UI at `http://<serverHostname>:<serverPort>` or edit `backend/config/config.example.json` prior to first run. Plex can discover the tuner by adding `http://<serverHostname>:<serverPort>` as a network tuner.

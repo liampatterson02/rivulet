@@ -1,0 +1,14 @@
+{
+    "m3uUrl": "http://example.com/playlist.m3u",
+    "numTuners": 1,
+    "friendlyName": "Rivulet HDHR Emulator",
+    "serverHostname": "localhost",
+    "serverPort": 3000,
+    "videoCodec": "none",
+    "audioCodec": "copy",
+    "videoBitrate": "",
+    "audioBitrate": "",
+    "scale": "",
+    "suffixes": ["FHD", "HD", "SD"]
+  }
+  
