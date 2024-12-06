@@ -1,0 +1,20 @@
+{
+    "serverPort": 3000,
+    "tunerName": "My IPTV Tuner",
+    "friendlyName": "rivulet HDHomeRun",
+    "m3uUrl": "http://example.com/playlist.m3u",
+    "numTuners": 3,
+    "segmentBufferCount": 5,
+    "segmentPreBufferCount": 2,
+    "segmentPostBufferCount": 2,
+    "backupQualitySuffixes": ["FHD", "HD", "SD"],
+    "ffmpegOptions": {
+      "videoCodec": "libx264",
+      "audioCodec": "aac",
+      "videoBitrate": "2000k",
+      "audioBitrate": "128k",
+      "scale": "1280:720",
+      "additionalParams": []
+    }
+  }
+  
