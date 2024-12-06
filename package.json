@@ -1,28 +1,27 @@
 {
-    "name": "rivulet",
-    "version": "1.0.0",
-    "description": "A virtual HDHomeRun IPTV proxy with transcoding and buffering (rivulet)",
-    "main": "server.js",
-    "scripts": {
-      "build:ui": "cd client && npm install && npm run build && cd .. && cp -r client/build/* public/",
-      "start": "node server.js",
-      "dev": "nodemon server.js"
-    },
-    "author": "Example Author",
-    "license": "MIT",
-    "dependencies": {
-      "axios": "^1.5.0",
-      "body-parser": "^1.20.2",
-      "cors": "^2.8.5",
-      "express": "^4.18.2",
-      "ffmpeg-static": "^5.1.0",
-      "m3u8-parser": "^4.6.0",
-      "node-fetch": "^3.3.1",
-      "serve-static": "^1.15.0",
-      "sqlite3": "^5.1.7"
-    },
-    "devDependencies": {
-      "nodemon": "^3.0.1"
-    }
+  "name": "rivulet",
+  "version": "1.0.0",
+  "description": "A virtual HDHomeRun IPTV proxy with transcoding and buffering (rivulet)",
+  "main": "server.js",
+  "scripts": {
+    "build:ui": "cd client && npm install && npm run build && cd .. && cp -r client/build/* public/",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "Example Author",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.5.0",
+    "body-parser": "^1.20.2",
+    "better-sqlite3": "^8.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "ffmpeg-static": "^5.2.0",
+    "m3u8-parser": "^4.6.0",
+    "node-fetch": "2.6.7",
+    "serve-static": "^1.15.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
-  
+}
