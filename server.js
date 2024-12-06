@@ -23,7 +23,6 @@ app.use(bodyParser.json());
 // Serve static files from React build
 app.use(express.static(path.join(__dirname, 'public')));
 
-// config is guaranteed to be loaded and synchronous here
 const cfg = config.getAll();
 
 // HDHomeRun discovery endpoints
@@ -62,7 +61,7 @@ app.get('/stream/:channelName', async (req, res) => {
   }
 });
 
-// API endpoints for configuration and control
+// API endpoints
 app.get('/api/config', (req, res) => {
   res.json(config.getAll());
 });
@@ -93,12 +92,11 @@ app.get('/api/epg', async (req, res) => {
   res.json(listings);
 });
 
-// Catch-all to serve the React UI
+// Catch-all for UI
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start the server now that config is loaded and serverPort is known
 app.listen(cfg.serverPort, () => {
   console.log(`rivulet server listening on port ${cfg.serverPort}`);
 });
