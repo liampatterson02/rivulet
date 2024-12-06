@@ -25,7 +25,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // HDHomeRun discovery endpoints
 app.get('/hdhr/discover.json', (req, res) => {
-  res.json(hdhr.getDiscoverJson(config.getAll()));
+  // config.getAll() returns a cached config object, no need to await here
+  const cfg = config.getAll();
+  res.json(hdhr.getDiscoverJson(cfg));
 });
 
 app.get('/hdhr/lineup_status.json', (req, res) => {
@@ -34,10 +36,11 @@ app.get('/hdhr/lineup_status.json', (req, res) => {
 
 app.get('/hdhr/lineup.json', async (req, res) => {
   const channels = await streamProxy.getChannelList();
+  const cfg = config.getAll();
   const lineup = channels.map((ch) => ({
     GuideNumber: ch.number.toString(),
-    GuideName: ch.name, // Name without suffixes
-    URL: `http://${req.hostname}:${config.get('serverPort')}/stream/${encodeURIComponent(ch.name)}`
+    GuideName: ch.name,
+    URL: `http://${req.hostname}:${cfg.serverPort}/stream/${encodeURIComponent(ch.name)}`
   }));
   res.json(lineup);
 });
@@ -59,7 +62,7 @@ app.get('/stream/:channelName', async (req, res) => {
   }
 });
 
-// API endpoints
+// API endpoints for configuration and control
 app.get('/api/config', (req, res) => {
   res.json(config.getAll());
 });
@@ -94,6 +97,11 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(config.get('serverPort'), () => {
-  console.log(`rivulet server listening on port ${config.get('serverPort')}`);
+// Instead of calling app.listen directly with config.get('serverPort'), we now wait for the promise
+config.get('serverPort').then(port => {
+  app.listen(port, () => {
+    console.log(`rivulet server listening on port ${port}`);
+  });
+}).catch(err => {
+  console.error('Error retrieving server port from config:', err);
 });
