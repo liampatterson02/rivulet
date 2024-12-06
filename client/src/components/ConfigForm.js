@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { setConfig } from '../api';
-import { TextField, Button, Grid, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { TextField, Button, Grid, Typography, FormControl, InputLabel, Select, MenuItem, Box, Chip, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function ConfigForm({ config, setConfig: updateConfig }) {
   const [localConfig, setLocalConfig] = useState(config);
   const [saveMessage, setSaveMessage] = useState('');
+  const [newSuffix, setNewSuffix] = useState('');
 
   const handleChange = (key, val) => {
     setLocalConfig({...localConfig, [key]: val});
@@ -18,6 +21,25 @@ export default function ConfigForm({ config, setConfig: updateConfig }) {
         ...localConfig.ffmpegOptions,
         [key]: val
       }
+    });
+    setSaveMessage('');
+  };
+
+  const handleAddSuffix = () => {
+    if (newSuffix.trim() !== '' && !localConfig.backupQualitySuffixes.includes(newSuffix.trim())) {
+      setLocalConfig({
+        ...localConfig,
+        backupQualitySuffixes: [...localConfig.backupQualitySuffixes, newSuffix.trim()]
+      });
+      setNewSuffix('');
+      setSaveMessage('');
+    }
+  };
+
+  const handleRemoveSuffix = (suffixToRemove) => {
+    setLocalConfig({
+      ...localConfig,
+      backupQualitySuffixes: localConfig.backupQualitySuffixes.filter(s => s !== suffixToRemove)
     });
     setSaveMessage('');
   };
@@ -119,6 +141,29 @@ export default function ConfigForm({ config, setConfig: updateConfig }) {
           />
         </Grid>
       </Grid>
+
+      <Typography variant="h6" style={{marginTop:'1em'}}>Backup Quality Suffixes</Typography>
+      <Box display="flex" flexWrap="wrap" gap={1} marginTop="1em">
+        {localConfig.backupQualitySuffixes.map((suffix) => (
+          <Chip 
+            key={suffix} 
+            label={suffix} 
+            onDelete={() => handleRemoveSuffix(suffix)} 
+            deleteIcon={<DeleteIcon />}
+          />
+        ))}
+      </Box>
+      <Box display="flex" alignItems="center" gap={1} marginTop="1em">
+        <TextField 
+          label="New Suffix" 
+          value={newSuffix} 
+          onChange={e => setNewSuffix(e.target.value)} 
+          size="small"
+        />
+        <IconButton onClick={handleAddSuffix} color="primary">
+          <AddIcon />
+        </IconButton>
+      </Box>
 
       <Button variant="contained" color="primary" style={{marginTop:'1em'}} onClick={handleSave}>Save Configuration</Button>
       {saveMessage && <Typography variant="body1" style={{marginTop:'0.5em', color:'green'}}>{saveMessage}</Typography>}
